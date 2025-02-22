@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    @apply bg-black text-slate-100;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  .bg-dark-gradient {
+    background: linear-gradient(to bottom, #000000, #111111);
+  }
+  
+  .bg-card-gradient {
+    background: linear-gradient(135deg, rgba(24, 24, 24, 0.6), rgba(0, 0, 0, 0.3));
+  }
+}
