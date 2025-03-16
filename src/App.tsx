@@ -15,7 +15,7 @@ function App() {
 
   const experiences = [
     {
-  "company": "Copods - Partners in Your Digital Journey",
+  "company": "Copods Design Technology Solutions",
   "role": "Software Engineer",
   "period": "Aug 2022 - Present · 2 yrs 7 mos",
   "location": "Pune, Maharashtra, India",
@@ -78,7 +78,7 @@ function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-dark-gradient text-slate-100">
+    <div className="min-h-screen bg-dark text-slate-100">
 
       {/* Main content container */}
       <div>
@@ -93,7 +93,7 @@ function App() {
           className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
         >
           <div className="max-w-4xl mx-auto px-4 text-center z-10">
-            <motion.h1 className="text-6xl font-bold mb-6 text-indigo-400" variants={fadeInUp}>
+            <motion.h1 className="text-6xl font-bold mb-6 text-[#818CF8]" variants={fadeInUp}>
               Dhruv Samant
             </motion.h1>
             <motion.p className="text-2xl text-slate-300 mb-8" variants={fadeInUp}>
@@ -120,7 +120,7 @@ function App() {
           className="py-20 px-4"
         >
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-8 text-indigo-400">About Me</h2>
+            <h2 className="text-4xl font-bold mb-8 text-[#818CF8]">About Me</h2>
             <p className="text-lg text-slate-300 leading-relaxed">
               I am a Software Engineer with nearly 3 years of experience specializing in full-stack development. My expertise lies in building scalable and high-performance web applications using React, Vue, and Node.js, with a strong focus on frontend architecture, microfrontends, and performance optimization. I have worked on projects spanning SaaS platforms, AI-driven solutions, and enterprise applications, implementing GraphQL, WebSockets, and cloud deployments to enhance user experiences. Passionate about clean code, reusable component design, and innovative problem-solving, I continuously seek to optimize workflows and push the boundaries of web development.
             </p>
@@ -138,7 +138,7 @@ function App() {
           className="py-20 px-4"
         >
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-12 text-indigo-400">Experience</h2>
+            <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Experience</h2>
             <div className="space-y-12">
               {experiences.map((exp, index) => (
                 <ExperienceCard key={index} experience={exp} />
@@ -157,7 +157,7 @@ function App() {
           className="py-20 px-4"
         >
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-8 text-indigo-400">Get In Touch</h2>
+            <h2 className="text-4xl font-bold mb-8 text-[#818CF8]">Get In Touch</h2>
             <p className="text-lg text-slate-300 mb-8">
               I'm always open to discussing new projects, creative ideas, or opportunities to collaborate.
             </p>
@@ -181,7 +181,7 @@ function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="text-slate-400 hover:text-indigo-400 transition-colors"
+      className="text-slate-400 hover:text-[#818CF8] transition-colors"
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
     >
@@ -208,7 +208,7 @@ function ExperienceCard({ experience }: { experience: Experience }) {
 
   return (
     <motion.div
-      className="bg-card-gradient backdrop-blur-sm rounded-lg p-8 border border-zinc-800 hover:border-indigo-400/30 transition-colors"
+      className="bg-card-gradient backdrop-blur-sm rounded-lg p-8 border border-zinc-800 hover:border-[#818CF8]/30 transition-colors"
     >
       <h3 className="text-2xl font-bold mb-2 text-slate-100">{experience.company}</h3>
       <p className="text-xl text-slate-300 mb-2">{experience.role}</p>
@@ -221,7 +221,7 @@ function ExperienceCard({ experience }: { experience: Experience }) {
       {experience.projects && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-4 flex items-center text-indigo-400 hover:text-indigo-300 transition"
+          className="mt-4 flex items-center text-[#818CF8] hover:text-indigo-300 transition"
         >
           {expanded ? "Hide Projects" : "Show Projects"}
           {expanded ? <ChevronUp className="ml-2" size={18} /> : <ChevronDown className="ml-2" size={18} />}
@@ -231,7 +231,7 @@ function ExperienceCard({ experience }: { experience: Experience }) {
         <div className="mt-4 space-y-4">
           {experience.projects?.map((project: { name: string; period: string; highlights: string[] }, index: number) => (
             <div key={index} className="p-4 bg-zinc-900 rounded-lg">
-              <h4 className="text-lg font-semibold text-indigo-400">{project.name}</h4>
+              <h4 className="text-lg font-semibold text-[#818CF8]">{project.name}</h4>
               <p className="text-sm text-slate-400">{project.period}</p>
               <ul className="list-disc list-inside text-slate-300 mt-2 space-y-1">
                 {project.highlights.map((highlight: string, i: number) => (
