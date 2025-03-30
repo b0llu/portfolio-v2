@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Github, Linkedin, Twitter, FileText, Mail, Send } from 'lucide-react';
 import { ProjectCard } from './components/ProjectCard';
 import { BlogCard } from './components/BlogCard';
-import { ExperienceCard } from './components/ExperienceCard';
 import { TabNavigation } from './components/TabNavigation';
 import { personalProjects } from './data/projects';
 import { blogPosts } from './data/blog';
 import { experiences } from './data/experience';
+import { ExperienceCard } from './components/ExperienceCard';
 
 function App() {
   const [heroRef, heroInView] = useInView({ triggerOnce: true });
