@@ -1,86 +1,226 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Github, Linkedin, Twitter, FileText, Mail, ChevronUp, ChevronDown } from 'lucide-react';
+import { Github, Linkedin, Twitter, FileText, Mail, Send } from 'lucide-react';
+import { ProjectCard } from './components/ProjectCard';
+import { BlogCard } from './components/BlogCard';
+import { ExperienceCard } from './components/ExperienceCard';
+import { TabNavigation } from './components/TabNavigation';
+import { personalProjects } from './data/projects';
+import { blogPosts } from './data/blog';
+import { experiences } from './data/experience';
 
 function App() {
   const [heroRef, heroInView] = useInView({ triggerOnce: true });
-  const [aboutRef, aboutInView] = useInView({ triggerOnce: true, threshold: 0.2 });
-  const [experienceRef, experienceInView] = useInView({ triggerOnce: true, threshold: 0.2 });
+  const [contentRef, contentInView] = useInView({ triggerOnce: true, threshold: 0.2 });
+  const [activeTab, setActiveTab] = useState('about');
+
+  const tabs = [
+    { id: 'about', label: 'About & Experience' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'blog', label: 'Blog' },
+    { id: 'contact', label: 'Contact' }
+  ];
 
   const fadeInUp = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 }
   };
 
-  const experiences = [
-    {
-  "company": "Copods Design Technology Solutions",
-  "role": "Software Engineer",
-  "period": "Aug 2022 - Present · 2 yrs 7 mos",
-  "location": "Pune, Maharashtra, India",
-  "highlights": [
-    "Developed dynamic UIs with Vue and React, enhancing user experiences across various projects.",
-    "Created a library of web components with Stencil to enhance UI development efficiency.",
-    "Deployed micro frontends via cloud storage and content delivery networks, utilizing AWS S3 and CloudFront for optimal performance.",
-    "Innovated a JSON-driven UI framework with React to boost interactivity and responsiveness.",
-    "Developed AI-driven projects to convert documents into structured learning materials and to generate multimedia content.",
-    "Conducted end-to-end testing with Cypress, ensuring platform reliability and functionality.",
-    "Led the development of key features across projects, guiding teams to successful implementations."
-  ],
-  "projects": [
-    {
-      "name": "Environmental Sustainability Platform",
-      "period": "October 2022 – February 2023",
-      "highlights": [
-        "Built interactive dashboards using React, Highcharts, and AGGrid to support real-time sustainability analytics.",
-        "Integrated AGGrid for advanced dataset management, enhancing sorting, filtering, and searching functionalities.",
-        "Developed isolated, reusable Storybook components to maintain UI consistency across the platform.",
-        "Optimized rendering performance with React.memo and React callbacks, improving load times and responsiveness."
-      ]
-    },
-    {
-      "name": "B2B SaaS Growth Integration Platform",
-      "period": "April 2023 – September 2023",
-      "highlights": [
-        "Implemented a scalable microfrontend architecture using Apollo GraphQL, React Router, and Webpack Module Federation.",
-        "Built a JSON-driven headless UI for real-time adaptability, enabling backend-defined UI changes.",
-        "Developed a reusable StencilJS component library to ensure consistency and flexibility in UI design.",
-        "Optimized large JSON state management with chunked rendering for smooth user interactions.",
-        "Engineered a high-performance rendering solution for React Flow workflows to ensure seamless real-time updates."
-      ]
-    },
-    {
-      "name": "AgriTech Platform",
-      "period": "October 2023 – April 2024",
-      "highlights": [
-        "Designed and implemented robust GraphQL APIs for secure and efficient data exchanges.",
-        "Integrated third-party regulatory software and external services to enhance platform compliance and capabilities.",
-        "Implemented jsPDF with AutoTable for automated, formatted PDF report generation.",
-        "Created an error logging system using Discord webhooks for real-time developer notifications.",
-        "Developed delivery service API integration for seamless logistics operations."
-      ]
-    },
-    {
-      "name": "Enterprise Mobile Cloud Solution",
-      "period": "July 2024 – Present",
-      "highlights": [
-        "Developed a comprehensive design system for the entire product using Storybook.",
-        "Built flow diagrams for network visualization using React Flow, improving data clarity.",
-        "Enhanced table functionalities with TanStack Table (React Table) and Material-UI for advanced data presentation.",
-        "Integrated Google Maps API for interactive radio coverage area visualization.",
-        "Optimized performance with React.memo and React callbacks to reduce latency and enhance UX."
-      ]
-    }
-  ]
-}
+  const tabContentVariants = {
+    enter: { opacity: 0, y: 20 },
+    center: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 }
+  };
 
-  ];
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'about':
+        return (
+          <motion.div
+            key="about"
+            variants={tabContentVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+            className="absolute top-0 left-0 w-full"
+          >
+            <div className="max-w-4xl mx-auto">
+              <div className="mb-20">
+                <h2 className="text-4xl font-bold mb-8 text-[#818CF8]">About Me</h2>
+                <div className="bg-zinc-900/50 backdrop-blur-sm rounded-lg p-8">
+                  <p className="text-lg text-slate-300 leading-relaxed">
+                    I am a Software Engineer with nearly 3 years of experience specializing in full-stack development. My expertise lies in building scalable and high-performance web applications using React, Vue, and Node.js, with a strong focus on frontend architecture, microfrontends, and performance optimization.
+                  </p>
+                  <p className="text-lg text-slate-300 leading-relaxed mt-4">
+                    I have worked on projects spanning SaaS platforms, AI-driven solutions, and enterprise applications, implementing GraphQL, WebSockets, and cloud deployments to enhance user experiences. Passionate about clean code, reusable component design, and innovative problem-solving, I continuously seek to optimize workflows and push the boundaries of web development.
+                  </p>
+                </div>
+              </div>
+              
+              <div>
+                <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Experience</h2>
+                <div className="space-y-12">
+                  {experiences.map((exp, index) => (
+                    <ExperienceCard key={index} experience={exp} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      case 'projects':
+        return (
+          <motion.div
+            key="projects"
+            variants={tabContentVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+            className="absolute top-0 left-0 w-full"
+          >
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Personal Projects</h2>
+              <div className="grid gap-8 md:grid-cols-2">
+                {personalProjects.map((project, index) => (
+                  <ProjectCard key={index} project={project} />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      case 'blog':
+        return (
+          <motion.div
+            key="blog"
+            variants={tabContentVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+            className="absolute top-0 left-0 w-full"
+          >
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Blog</h2>
+              <div className="space-y-8">
+                {blogPosts.map((post, index) => (
+                  <BlogCard key={index} post={post} />
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      case 'contact':
+        return (
+          <motion.div
+            key="contact"
+            variants={tabContentVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.3 }}
+            className="absolute top-0 left-0 w-full"
+          >
+            <div className="max-w-4xl mx-auto">
+              <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Get in Touch</h2>
+              
+              <div className="grid md:grid-cols-[1fr,1.5fr] gap-12">
+                {/* Social Links */}
+                <div className="bg-zinc-900/50 backdrop-blur-sm rounded-lg p-8">
+                  <h3 className="text-xl font-semibold mb-6 text-[#818CF8]">Connect With Me</h3>
+                  <div className="space-y-6">
+                    <a href="https://github.com/b0llu" target="_blank" rel="noopener noreferrer" 
+                      className="flex items-center text-slate-300 hover:text-[#818CF8] transition-colors">
+                      <Github className="mr-4" size={24} />
+                      <div>
+                        <div className="font-medium">GitHub</div>
+                        <div className="text-sm text-slate-400">Check out my code</div>
+                      </div>
+                    </a>
+                    <a href="https://www.linkedin.com/in/the-best-dhruv/" target="_blank" rel="noopener noreferrer"
+                      className="flex items-center text-slate-300 hover:text-[#818CF8] transition-colors">
+                      <Linkedin className="mr-4" size={24} />
+                      <div>
+                        <div className="font-medium">LinkedIn</div>
+                        <div className="text-sm text-slate-400">Let's connect professionally</div>
+                      </div>
+                    </a>
+                    <a href="https://x.com/TheBestDhruv" target="_blank" rel="noopener noreferrer"
+                      className="flex items-center text-slate-300 hover:text-[#818CF8] transition-colors">
+                      <Twitter className="mr-4" size={24} />
+                      <div>
+                        <div className="font-medium">Twitter</div>
+                        <div className="text-sm text-slate-400">Follow my updates</div>
+                      </div>
+                    </a>
+                    <a href="mailto:samantdhruv@gmail.com"
+                      className="flex items-center text-slate-300 hover:text-[#818CF8] transition-colors">
+                      <Mail className="mr-4" size={24} />
+                      <div>
+                        <div className="font-medium">Email</div>
+                        <div className="text-sm text-slate-400">samantdhruv@gmail.com</div>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Contact Form */}
+                <div className="bg-zinc-900/50 backdrop-blur-sm rounded-lg p-8">
+                  <h3 className="text-xl font-semibold mb-6 text-[#818CF8]">Send a Message</h3>
+                  <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">Name</label>
+                      <input
+                        type="text"
+                        id="name"
+                        className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors"
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">Email</label>
+                      <input
+                        type="email"
+                        id="email"
+                        className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors"
+                        placeholder="your@email.com"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">Message</label>
+                      <textarea
+                        id="message"
+                        rows={4}
+                        className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors resize-none"
+                        placeholder="Your message..."
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full flex items-center justify-center px-6 py-3 rounded-lg bg-[#818CF8] text-white font-medium hover:bg-[#818CF8]/90 transition-colors"
+                    >
+                      <Send className="mr-2" size={20} />
+                      Send Message
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-dark text-slate-100">
-
-      {/* Main content container */}
       <div>
         {/* Hero Section */}
         <motion.section
@@ -93,156 +233,114 @@ function App() {
           className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
         >
           <div className="max-w-4xl mx-auto px-4 text-center z-10">
+            <motion.div
+              className="mb-12 relative"
+              variants={fadeInUp}
+            >
+              <motion.div
+                className="w-80 h-80 mx-auto rounded-2xl overflow-hidden border-2 border-[#818CF8]/30 shadow-lg"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2 }}
+              >
+                <img
+                  src="https://res.cloudinary.com/dtzklid8v/image/upload/v1743331317/file_0000000030605230991360ada617c074_conversation_id_67e6528d-4a90-8000-9bfe-6d1735a47392_message_id_e579870a-d2b3-49c8-850a-a53a2c2c2f8c_daikwe.png"
+                  alt="Dhruv Samant"
+                  className="w-full h-full object-cover"
+                />
+              </motion.div>
+            </motion.div>
             <motion.h1 className="text-6xl font-bold mb-6 text-[#818CF8]" variants={fadeInUp}>
               Dhruv Samant
             </motion.h1>
-            <motion.p className="text-2xl text-slate-300 mb-8" variants={fadeInUp}>
+            <motion.p className="text-2xl text-slate-300 mb-12" variants={fadeInUp}>
               Software Engineer
             </motion.p>
-            <motion.div className="flex justify-center space-x-6" variants={fadeInUp}>
-              <SocialLink href="https://github.com/b0llu" icon={<Github />} />
-              <SocialLink href="https://www.linkedin.com/in/the-best-dhruv/" icon={<Linkedin />} />
-              <SocialLink href="https://x.com/TheBestDhruv" icon={<Twitter />} />
-              <SocialLink href="https://docs.google.com/document/d/1HXfKbZ52zuRsSFb9GyCIbhx-GTUJ9uIOlagt5a7KJFw/edit?usp=sharing" icon={<FileText />} />
-              <SocialLink href="mailto:samantdhruv@gmail.com" icon={<Mail />} />
+            <motion.div 
+              className="flex flex-wrap justify-center gap-6" 
+              variants={fadeInUp}
+              initial="hidden"
+              animate="visible"
+              transition={{ delay: 0.3 }}
+            >
+              <motion.a
+                href="https://github.com/b0llu"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Github className="mr-2" size={20} />
+                <span>GitHub</span>
+              </motion.a>
+              <motion.a
+                href="https://www.linkedin.com/in/the-best-dhruv/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Linkedin className="mr-2" size={20} />
+                <span>LinkedIn</span>
+              </motion.a>
+              <motion.a
+                href="https://x.com/TheBestDhruv"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Twitter className="mr-2" size={20} />
+                <span>Twitter</span>
+              </motion.a>
+              <motion.a
+                href="https://docs.google.com/document/d/1HXfKbZ52zuRsSFb9GyCIbhx-GTUJ9uIOlagt5a7KJFw/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <FileText className="mr-2" size={20} />
+                <span>Resume</span>
+              </motion.a>
+              <motion.a
+                href="mailto:samantdhruv@gmail.com"
+                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Mail className="mr-2" size={20} />
+                <span>Email</span>
+              </motion.a>
             </motion.div>
           </div>
         </motion.section>
 
-        {/* About Section */}
+        {/* Content Section with Tabs */}
         <motion.section
-          id="about"
-          ref={aboutRef}
+          ref={contentRef}
           initial="hidden"
-          animate={aboutInView ? "visible" : "hidden"}
+          animate={contentInView ? "visible" : "hidden"}
           variants={fadeInUp}
           transition={{ duration: 0.6 }}
           className="py-20 px-4"
         >
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-8 text-[#818CF8]">About Me</h2>
-            <p className="text-lg text-slate-300 leading-relaxed">
-              I am a Software Engineer with nearly 3 years of experience specializing in full-stack development. My expertise lies in building scalable and high-performance web applications using React, Vue, and Node.js, with a strong focus on frontend architecture, microfrontends, and performance optimization. I have worked on projects spanning SaaS platforms, AI-driven solutions, and enterprise applications, implementing GraphQL, WebSockets, and cloud deployments to enhance user experiences. Passionate about clean code, reusable component design, and innovative problem-solving, I continuously seek to optimize workflows and push the boundaries of web development.
-            </p>
-          </div>
-        </motion.section>
-
-        {/* Experience Section */}
-        <motion.section
-          id="experience"
-          ref={experienceRef}
-          initial="hidden"
-          animate={experienceInView ? "visible" : "hidden"}
-          variants={fadeInUp}
-          transition={{ duration: 0.6 }}
-          className="py-20 px-4"
-        >
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Experience</h2>
-            <div className="space-y-12">
-              {experiences.map((exp, index) => (
-                <ExperienceCard key={index} experience={exp} />
-              ))}
-            </div>
-          </div>
-        </motion.section>
-
-        {/* Contact Section */}
-        <motion.section
-          id="contact"
-          initial="hidden"
-          animate="visible"
-          variants={fadeInUp}
-          transition={{ duration: 0.6 }}
-          className="py-20 px-4"
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold mb-8 text-[#818CF8]">Get In Touch</h2>
-            <p className="text-lg text-slate-300 mb-8">
-              I'm always open to discussing new projects, creative ideas, or opportunities to collaborate.
-            </p>
-            <motion.div className="flex justify-center space-x-6">
-              <SocialLink href="https://github.com/b0llu" icon={<Github />} />
-              <SocialLink href="https://www.linkedin.com/in/the-best-dhruv/" icon={<Linkedin />} />
-              <SocialLink href="https://x.com/TheBestDhruv" icon={<Twitter />} />
-              <SocialLink href="https://docs.google.com/document/d/1HXfKbZ52zuRsSFb9GyCIbhx-GTUJ9uIOlagt5a7KJFw/edit?usp=sharing" icon={<FileText />} />
-              <SocialLink href="mailto:samantdhruv@gmail.com" icon={<Mail />} />
-            </motion.div>
+          <TabNavigation
+            tabs={tabs}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
+          <div className="relative min-h-[800px]">
+            <AnimatePresence mode="wait">
+              {renderTabContent()}
+            </AnimatePresence>
           </div>
         </motion.section>
       </div>
     </div>
-  );
-}
-
-function SocialLink({ href, icon }: { href: string; icon: React.ReactNode }) {
-  return (
-    <motion.a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-slate-400 hover:text-[#818CF8] transition-colors"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      {icon}
-    </motion.a>
-  );
-}
-
-type Experience = {
-  company: string;
-  role: string;
-  period: string;
-  location?: string;
-  highlights: string[];
-  projects?: {
-    name: string;
-    period: string;
-    highlights: string[];
-  }[];
-};
-
-function ExperienceCard({ experience }: { experience: Experience }) {
-  const [expanded, setExpanded] = useState(true);
-
-  return (
-    <motion.div
-      className="bg-card-gradient backdrop-blur-sm rounded-lg p-8 border border-zinc-800 hover:border-[#818CF8]/30 transition-colors"
-    >
-      <h3 className="text-2xl font-bold mb-2 text-slate-100">{experience.company}</h3>
-      <p className="text-xl text-slate-300 mb-2">{experience.role}</p>
-      <p className="text-slate-400 mb-4">{experience.period}</p>
-      <ul className="list-disc list-inside text-slate-300 space-y-2">
-        {experience.highlights.map((highlight: string, i: number) => (
-          <li key={i}>{highlight}</li>
-        ))}
-      </ul>
-      {experience.projects && (
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="mt-4 flex items-center text-[#818CF8] hover:text-indigo-300 transition"
-        >
-          {expanded ? "Hide Projects" : "Show Projects"}
-          {expanded ? <ChevronUp className="ml-2" size={18} /> : <ChevronDown className="ml-2" size={18} />}
-        </button>
-      )}
-      {expanded && (
-        <div className="mt-4 space-y-4">
-          {experience.projects?.map((project: { name: string; period: string; highlights: string[] }, index: number) => (
-            <div key={index} className="p-4 bg-zinc-900 rounded-lg">
-              <h4 className="text-lg font-semibold text-[#818CF8]">{project.name}</h4>
-              <p className="text-sm text-slate-400">{project.period}</p>
-              <ul className="list-disc list-inside text-slate-300 mt-2 space-y-1">
-                {project.highlights.map((highlight: string, i: number) => (
-                  <li key={i}>{highlight}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      )}
-    </motion.div>
   );
 }
 
