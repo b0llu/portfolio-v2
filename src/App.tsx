@@ -46,7 +46,7 @@ function App() {
             transition={{ duration: 0.3 }}
             className="absolute top-0 left-0 w-full"
           >
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto pb-12">
               <div className="mb-20">
                 <h2 className="text-4xl font-bold mb-8 text-[#818CF8]">About Me</h2>
                 <div className="bg-zinc-900/50 backdrop-blur-sm rounded-lg p-8">
