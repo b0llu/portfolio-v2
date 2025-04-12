@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Github, Linkedin, Twitter, FileText, Mail, Send } from 'lucide-react';
@@ -9,11 +9,18 @@ import { personalProjects } from './data/projects';
 import { blogPosts } from './data/blog';
 import { experiences } from './data/experience';
 import { ExperienceCard } from './components/ExperienceCard';
+import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
 function App() {
   const [heroRef, heroInView] = useInView({ triggerOnce: true });
   const [contentRef, contentInView] = useInView({ triggerOnce: true, threshold: 0.2 });
   const [activeTab, setActiveTab] = useState('about');
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({
+    type: null,
+    message: ''
+  });
+  const form = useRef<HTMLFormElement>(null);
 
   const tabs = [
     { id: 'about', label: 'About & Experience' },
@@ -31,6 +38,48 @@ function App() {
     enter: { opacity: 0, y: 20 },
     center: { opacity: 1, y: 0 },
     exit: { opacity: 0, y: -20 }
+  };
+
+  const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setEmailStatus({ type: null, message: '' });
+
+    try {
+      const formData = {
+        name: form.current?.querySelector<HTMLInputElement>('[name="user_name"]')?.value || '',
+        message: form.current?.querySelector<HTMLTextAreaElement>('[name="message"]')?.value || '',
+        email: form.current?.querySelector<HTMLInputElement>('[name="user_email"]')?.value || '',
+        time: new Date().toLocaleString()
+      };
+
+      const result = await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formData,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+
+      if (result.text === 'OK') {
+        setEmailStatus({
+          type: 'success',
+          message: 'Message sent successfully!'
+        });
+        if (form.current) {
+          form.current.reset();
+        }
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof EmailJSResponseStatus 
+        ? error.text 
+        : 'Failed to send message. Please try again.';
+      setEmailStatus({
+        type: 'error',
+        message: errorMessage
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renderTabContent = () => {
@@ -172,12 +221,14 @@ function App() {
                 {/* Contact Form */}
                 <div className="bg-zinc-900/50 backdrop-blur-sm rounded-lg p-8">
                   <h3 className="text-xl font-semibold mb-6 text-[#818CF8]">Send a Message</h3>
-                  <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                  <form className="space-y-6" onSubmit={sendEmail} ref={form}>
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">Name</label>
                       <input
                         type="text"
+                        name="user_name"
                         id="name"
+                        required
                         className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors"
                         placeholder="Your name"
                       />
@@ -186,7 +237,9 @@ function App() {
                       <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">Email</label>
                       <input
                         type="email"
+                        name="user_email"
                         id="email"
+                        required
                         className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors"
                         placeholder="your@email.com"
                       />
@@ -195,17 +248,34 @@ function App() {
                       <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">Message</label>
                       <textarea
                         id="message"
+                        name="message"
                         rows={4}
+                        required
                         className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors resize-none"
                         placeholder="Your message..."
                       />
                     </div>
+                    {emailStatus.type && (
+                      <div className={`text-sm ${emailStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                        {emailStatus.message}
+                      </div>
+                    )}
                     <button
                       type="submit"
-                      className="w-full flex items-center justify-center px-6 py-3 rounded-lg bg-[#818CF8] text-white font-medium hover:bg-[#818CF8]/90 transition-colors"
+                      disabled={isLoading}
+                      className="w-full flex items-center justify-center px-6 py-3 rounded-lg bg-[#818CF8] text-white font-medium hover:bg-[#818CF8]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <Send className="mr-2" size={20} />
-                      Send Message
+                      {isLoading ? (
+                        <>
+                          <span className="animate-spin mr-2">⏳</span>
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="mr-2" size={20} />
+                          Send Message
+                        </>
+                      )}
                     </button>
                   </form>
                 </div>
