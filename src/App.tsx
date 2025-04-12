@@ -1,44 +1,21 @@
 import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Github, Linkedin, Twitter, FileText, Mail, Send } from 'lucide-react';
-import { ProjectCard } from './components/ProjectCard';
-import { BlogCard } from './components/BlogCard';
-import { TabNavigation } from './components/TabNavigation';
-import { personalProjects } from './data/projects';
-import { blogPosts } from './data/blog';
+import { Github, Linkedin, Twitter, Mail, Send } from 'lucide-react';
+import { personalProjects, Project } from './data/projects';
+import { blogPosts, BlogPost } from './data/blog';
 import { experiences } from './data/experience';
-import { ExperienceCard } from './components/ExperienceCard';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
 
 function App() {
   const [heroRef, heroInView] = useInView({ triggerOnce: true });
-  const [contentRef, contentInView] = useInView({ triggerOnce: true, threshold: 0.2 });
-  const [activeTab, setActiveTab] = useState('about');
+  const [activeSection, setActiveSection] = useState('home');
   const [isLoading, setIsLoading] = useState(false);
   const [emailStatus, setEmailStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({
     type: null,
     message: ''
   });
   const form = useRef<HTMLFormElement>(null);
-
-  const tabs = [
-    { id: 'about', label: 'About & Experience' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'blog', label: 'Blog' },
-    { id: 'contact', label: 'Contact' }
-  ];
-
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
-
-  const tabContentVariants = {
-    enter: { opacity: 0, y: 20 },
-    center: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: -20 }
-  };
 
   const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -82,334 +59,345 @@ function App() {
     }
   };
 
-  const renderTabContent = () => {
-    switch (activeTab) {
-      case 'about':
-        return (
-          <motion.div
-            key="about"
-            variants={tabContentVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.3 }}
-            className="absolute top-0 left-0 w-full"
+  return (
+    <div className="min-h-screen bg-[#111111] text-white">
+      {/* Navigation */}
+      <nav className="container mx-auto px-4 py-8 max-w-3xl">
+        <div className="flex justify-start space-x-8">
+          <a 
+            href="#" 
+            onClick={() => setActiveSection('home')}
+            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
+              activeSection === 'home' ? 'border-white' : 'border-transparent'
+            }`}
           >
-            <div className="max-w-4xl mx-auto pb-12">
-              <div className="mb-20">
-                <h2 className="text-4xl font-bold mb-8 text-[#818CF8]">About Me</h2>
-                <div className="bg-zinc-900/50 backdrop-blur-sm rounded-lg p-8">
-                  <p className="text-lg text-slate-300 leading-relaxed">
-                    I am a Software Engineer with nearly 3 years of experience specializing in full-stack development. My expertise lies in building scalable and high-performance web applications using React, Vue, and Node.js, with a strong focus on frontend architecture, microfrontends, and performance optimization.
-                  </p>
-                  <p className="text-lg text-slate-300 leading-relaxed mt-4">
-                    I have worked on projects spanning SaaS platforms, AI-driven solutions, and enterprise applications, implementing GraphQL, WebSockets, and cloud deployments to enhance user experiences. Passionate about clean code, reusable component design, and innovative problem-solving, I continuously seek to optimize workflows and push the boundaries of web development.
-                  </p>
+            Home
+          </a>
+          <a 
+            href="#projects" 
+            onClick={() => setActiveSection('projects')}
+            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
+              activeSection === 'projects' ? 'border-white' : 'border-transparent'
+            }`}
+          >
+            Projects
+          </a>
+          <a 
+            href="#blog" 
+            onClick={() => setActiveSection('blog')}
+            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
+              activeSection === 'blog' ? 'border-white' : 'border-transparent'
+            }`}
+          >
+            Blog
+          </a>
+          <a 
+            href="#tags" 
+            onClick={() => setActiveSection('tags')}
+            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
+              activeSection === 'tags' ? 'border-white' : 'border-transparent'
+            }`}
+          >
+            Tags
+          </a>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <header className="container mx-auto px-4 py-16 max-w-3xl">
+        <motion.div
+          ref={heroRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={heroInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+        >
+          <h1 className="text-4xl font-bold mb-2">Dhruv Samant</h1>
+          <p className="text-gray-400 mb-16">Software Engineer & Digital Craftsman</p>
+          
+          <div className="aspect-video rounded-lg overflow-hidden mb-12">
+            <img 
+              src="https://picsum.photos/800/400?grayscale" 
+              alt="Professional headshot" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div className="prose prose-invert">
+            <p className="text-lg text-gray-300 leading-relaxed">
+              I'm a Software Engineer who thrives at the intersection of code and creativity. 
+              When I'm not crafting elegant solutions or optimizing performance, you'll find me 
+              immersed in the latest gaming adventures. I have a knack for turning complex problems 
+              into elegant solutions, and I'm constantly exploring emerging technologies to push the 
+              boundaries of what's possible in software development.
+            </p>
+            
+            <div className="mt-8">
+              <a 
+                href="#contact"
+                className="inline-flex items-center px-6 py-2 rounded bg-white/10 text-white hover:bg-white/20 transition-colors"
+              >
+                Get in Touch
+              </a>
+            </div>
+          </div>
+        </motion.div>
+      </header>
+
+      {/* Content Sections */}
+      <main className="container mx-auto px-4 py-16 max-w-3xl">
+        <div className="space-y-24">
+          {/* About Section */}
+          <section>
+            <h2 className="text-2xl font-bold mb-8">About Me</h2>
+            <div className="prose prose-invert">
+              <p className="text-gray-300 leading-relaxed">
+                As a Software Engineer with a passion for innovation, I blend technical expertise with 
+                creative problem-solving. My journey in software development is driven by a desire to 
+                create impactful solutions that make a difference. Beyond coding, I'm an avid gamer 
+                who believes that the strategic thinking and quick decision-making skills from gaming 
+                translate perfectly into the world of software development. I'm always excited to 
+                explore new technologies and frameworks, constantly pushing myself to learn and grow 
+                in this ever-evolving field.
+              </p>
+            </div>
+          </section>
+
+          {/* Experience Section */}
+          <section>
+            <h2 className="text-2xl font-bold mb-8">Experience</h2>
+            <div className="space-y-12">
+              {experiences.map((experience, index) => (
+                <div key={index} className="bg-white/5 rounded-lg p-6 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl font-semibold mb-1">{experience.role}</h3>
+                  <div className="text-gray-400 mb-4">
+                    <span>{experience.company}</span>
+                    <span className="mx-2">•</span>
+                    <span>{experience.period}</span>
+                    {experience.location && (
+                      <>
+                        <span className="mx-2">•</span>
+                        <span>{experience.location}</span>
+                      </>
+                    )}
+                  </div>
+                  <ul className="space-y-2 text-gray-300">
+                    {experience.highlights.map((highlight, i) => (
+                      <li key={i} className="flex items-start">
+                        <span className="mr-2 mt-1.5">•</span>
+                        <span>{highlight}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  {experience.projects && (
+                    <div className="mt-6 space-y-4">
+                      <h4 className="text-lg font-semibold text-gray-200">Key Projects</h4>
+                      {experience.projects.map((project, i) => (
+                        <div key={i} className="bg-white/5 rounded p-4">
+                          <h5 className="font-medium mb-1">{project.name}</h5>
+                          <p className="text-sm text-gray-400 mb-2">{project.period}</p>
+                          <ul className="space-y-1 text-sm text-gray-300">
+                            {project.highlights.map((highlight, j) => (
+                              <li key={j} className="flex items-start">
+                                <span className="mr-2 mt-1">•</span>
+                                <span>{highlight}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-              </div>
-              
-              <div>
-                <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Experience</h2>
-                <div className="space-y-12">
-                  {experiences.map((exp, index) => (
-                    <ExperienceCard key={index} experience={exp} />
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
-          </motion.div>
-        );
+          </section>
 
-      case 'projects':
-        return (
-          <motion.div
-            key="projects"
-            variants={tabContentVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.3 }}
-            className="absolute top-0 left-0 w-full"
-          >
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Personal Projects</h2>
-              <div className="grid gap-8 md:grid-cols-2">
-                {personalProjects.map((project, index) => (
-                  <ProjectCard key={index} project={project} />
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        );
-
-      case 'blog':
-        return (
-          <motion.div
-            key="blog"
-            variants={tabContentVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.3 }}
-            className="absolute top-0 left-0 w-full"
-          >
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Blog</h2>
-              <div className="space-y-8">
-                {blogPosts.map((post, index) => (
-                  <BlogCard key={index} post={post} />
-                ))}
-              </div>
-            </div>
-          </motion.div>
-        );
-
-      case 'contact':
-        return (
-          <motion.div
-            key="contact"
-            variants={tabContentVariants}
-            initial="enter"
-            animate="center"
-            exit="exit"
-            transition={{ duration: 0.3 }}
-            className="absolute top-0 left-0 w-full"
-          >
-            <div className="max-w-4xl mx-auto">
-              <h2 className="text-4xl font-bold mb-12 text-[#818CF8]">Get in Touch</h2>
-              
-              <div className="grid md:grid-cols-[1fr,1.5fr] gap-12">
-                {/* Social Links */}
-                <div className="bg-zinc-900/50 backdrop-blur-sm rounded-lg p-8">
-                  <h3 className="text-xl font-semibold mb-6 text-[#818CF8]">Connect With Me</h3>
-                  <div className="space-y-6">
-                    <a href="https://github.com/b0llu" target="_blank" rel="noopener noreferrer" 
-                      className="flex items-center text-slate-300 hover:text-[#818CF8] transition-colors">
-                      <Github className="mr-4" size={24} />
-                      <div>
-                        <div className="font-medium">GitHub</div>
-                        <div className="text-sm text-slate-400">Check out my code</div>
-                      </div>
-                    </a>
-                    <a href="https://www.linkedin.com/in/the-best-dhruv/" target="_blank" rel="noopener noreferrer"
-                      className="flex items-center text-slate-300 hover:text-[#818CF8] transition-colors">
-                      <Linkedin className="mr-4" size={24} />
-                      <div>
-                        <div className="font-medium">LinkedIn</div>
-                        <div className="text-sm text-slate-400">Let's connect professionally</div>
-                      </div>
-                    </a>
-                    <a href="https://x.com/TheBestDhruv" target="_blank" rel="noopener noreferrer"
-                      className="flex items-center text-slate-300 hover:text-[#818CF8] transition-colors">
-                      <Twitter className="mr-4" size={24} />
-                      <div>
-                        <div className="font-medium">Twitter</div>
-                        <div className="text-sm text-slate-400">Follow my updates</div>
-                      </div>
-                    </a>
-                    <a href="mailto:samantdhruv@gmail.com"
-                      className="flex items-center text-slate-300 hover:text-[#818CF8] transition-colors">
-                      <Mail className="mr-4" size={24} />
-                      <div>
-                        <div className="font-medium">Email</div>
-                        <div className="text-sm text-slate-400">samantdhruv@gmail.com</div>
-                      </div>
-                    </a>
+          {/* Projects Section */}
+          <section id="projects">
+            <h2 className="text-2xl font-bold mb-8">Projects</h2>
+            <div className="grid gap-8 md:grid-cols-2">
+              {personalProjects.map((project: Project, index: number) => (
+                <div key={index} className="bg-white/5 rounded-lg p-6 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl font-semibold mb-2">{project.name}</h3>
+                  <p className="text-gray-300 mb-4">{project.description}</p>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {project.technologies.map((tech: string, i: number) => (
+                      <span key={i} className="text-sm bg-white/10 px-2 py-1 rounded">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="flex space-x-4">
+                    {project.githubUrl && (
+                      <a 
+                        href={project.githubUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-gray-300 hover:text-white transition-colors"
+                      >
+                        <Github size={20} />
+                      </a>
+                    )}
+                    {project.liveUrl && (
+                      <a 
+                        href={project.liveUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-gray-300 hover:text-white transition-colors"
+                      >
+                        View Demo
+                      </a>
+                    )}
                   </div>
                 </div>
+              ))}
+            </div>
+          </section>
 
-                {/* Contact Form */}
-                <div className="bg-zinc-900/50 backdrop-blur-sm rounded-lg p-8">
-                  <h3 className="text-xl font-semibold mb-6 text-[#818CF8]">Send a Message</h3>
-                  <form className="space-y-6" onSubmit={sendEmail} ref={form}>
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-2">Name</label>
-                      <input
-                        type="text"
-                        name="user_name"
-                        id="name"
-                        required
-                        className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors"
-                        placeholder="Your name"
-                      />
+          {/* Blog Section */}
+          <section id="blog">
+            <h2 className="text-2xl font-bold mb-8">Blog</h2>
+            <div className="space-y-8">
+              {blogPosts.map((post: BlogPost, index: number) => (
+                <div key={index} className="bg-white/5 rounded-lg p-6 hover:bg-white/10 transition-colors">
+                  <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
+                  <p className="text-gray-400 mb-2">{post.date}</p>
+                  <p className="text-gray-300 mb-4">{post.summary}</p>
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.map((tag: string, i: number) => (
+                      <span key={i} className="text-sm bg-white/10 px-2 py-1 rounded">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Contact Section */}
+          <section id="contact">
+            <h2 className="text-2xl font-bold mb-8">Contact</h2>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Social Links */}
+              <div className="bg-white/5 rounded-lg p-6 h-full">
+                <h3 className="text-xl font-semibold mb-6">Connect</h3>
+                <div className="space-y-6">
+                  <a 
+                    href="https://github.com/b0llu" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="flex items-center group"
+                  >
+                    <div className="bg-white/10 p-3 rounded-lg mr-4 group-hover:bg-white/20 transition-colors">
+                      <Github size={20} className="text-gray-300" />
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-2">Email</label>
-                      <input
-                        type="email"
-                        name="user_email"
-                        id="email"
-                        required
-                        className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors"
-                        placeholder="your@email.com"
-                      />
+                      <div className="font-medium text-gray-300 group-hover:text-white transition-colors">GitHub</div>
+                      <div className="text-sm text-gray-400">Follow my work</div>
+                    </div>
+                  </a>
+                  <a 
+                    href="https://www.linkedin.com/in/the-best-dhruv/" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center group"
+                  >
+                    <div className="bg-white/10 p-3 rounded-lg mr-4 group-hover:bg-white/20 transition-colors">
+                      <Linkedin size={20} className="text-gray-300" />
                     </div>
                     <div>
-                      <label htmlFor="message" className="block text-sm font-medium text-slate-300 mb-2">Message</label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={4}
-                        required
-                        className="w-full px-4 py-2 rounded-lg bg-zinc-800/50 border border-zinc-700 text-slate-300 focus:outline-none focus:border-[#818CF8] transition-colors resize-none"
-                        placeholder="Your message..."
-                      />
+                      <div className="font-medium text-gray-300 group-hover:text-white transition-colors">LinkedIn</div>
+                      <div className="text-sm text-gray-400">Let's connect professionally</div>
                     </div>
-                    {emailStatus.type && (
-                      <div className={`text-sm ${emailStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
-                        {emailStatus.message}
-                      </div>
-                    )}
-                    <button
-                      type="submit"
-                      disabled={isLoading}
-                      className="w-full flex items-center justify-center px-6 py-3 rounded-lg bg-[#818CF8] text-white font-medium hover:bg-[#818CF8]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isLoading ? (
-                        <>
-                          <span className="animate-spin mr-2">⏳</span>
-                          Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2" size={20} />
-                          Send Message
-                        </>
-                      )}
-                    </button>
-                  </form>
+                  </a>
+                  <a 
+                    href="https://x.com/TheBestDhruv" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center group"
+                  >
+                    <div className="bg-white/10 p-3 rounded-lg mr-4 group-hover:bg-white/20 transition-colors">
+                      <Twitter size={20} className="text-gray-300" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-300 group-hover:text-white transition-colors">Twitter</div>
+                      <div className="text-sm text-gray-400">Follow my updates</div>
+                    </div>
+                  </a>
+                  <a 
+                    href="mailto:samantdhruv@gmail.com"
+                    className="flex items-center group"
+                  >
+                    <div className="bg-white/10 p-3 rounded-lg mr-4 group-hover:bg-white/20 transition-colors">
+                      <Mail size={20} className="text-gray-300" />
+                    </div>
+                    <div>
+                      <div className="font-medium text-gray-300 group-hover:text-white transition-colors">Email</div>
+                      <div className="text-sm text-gray-400">samantdhruv@gmail.com</div>
+                    </div>
+                  </a>
                 </div>
               </div>
+
+              {/* Contact Form */}
+              <form className="bg-white/5 rounded-lg p-6 h-full flex flex-col" onSubmit={sendEmail} ref={form}>
+                <div className="space-y-4 flex-grow">
+                  <div>
+                    <input
+                      type="text"
+                      name="user_name"
+                      required
+                      className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
+                      placeholder="Your name"
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="email"
+                      name="user_email"
+                      required
+                      className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded text-white placeholder-gray-400 focus:outline-none focus:border-white/40"
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                  <div>
+                    <textarea
+                      name="message"
+                      rows={4}
+                      required
+                      className="w-full px-4 py-2 bg-white/10 border border-white/20 rounded text-white placeholder-gray-400 focus:outline-none focus:border-white/40 resize-none"
+                      placeholder="Your message..."
+                    />
+                  </div>
+                  {emailStatus.type && (
+                    <div className={`text-sm ${emailStatus.type === 'success' ? 'text-green-400' : 'text-red-400'}`}>
+                      {emailStatus.message}
+                    </div>
+                  )}
+                </div>
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full px-6 py-2 bg-white/10 text-white hover:bg-white/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded mt-4"
+                >
+                  {isLoading ? (
+                    <>
+                      <span className="animate-spin mr-2">⏳</span>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="mr-2 inline" size={16} />
+                      Send Message
+                    </>
+                  )}
+                </button>
+              </form>
             </div>
-          </motion.div>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-dark text-slate-100">
-      <div>
-        {/* Hero Section */}
-        <motion.section
-          id="hero"
-          ref={heroRef}
-          initial="hidden"
-          animate={heroInView ? "visible" : "hidden"}
-          variants={fadeInUp}
-          transition={{ duration: 0.6 }}
-          className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
-        >
-          <div className="max-w-4xl mx-auto px-4 text-center z-10">
-            <motion.div
-              className="mb-12 relative"
-              variants={fadeInUp}
-            >
-              <motion.div
-                className="w-80 h-80 mx-auto rounded-2xl overflow-hidden border-2 border-[#818CF8]/30 shadow-lg"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.2 }}
-              >
-                <img
-                  src="https://res.cloudinary.com/dtzklid8v/image/upload/v1743331317/file_0000000030605230991360ada617c074_conversation_id_67e6528d-4a90-8000-9bfe-6d1735a47392_message_id_e579870a-d2b3-49c8-850a-a53a2c2c2f8c_daikwe.png"
-                  alt="Dhruv Samant"
-                  className="w-full h-full object-cover"
-                />
-              </motion.div>
-            </motion.div>
-            <motion.h1 className="text-6xl font-bold mb-6 text-[#818CF8]" variants={fadeInUp}>
-              Dhruv Samant
-            </motion.h1>
-            <motion.p className="text-2xl text-slate-300 mb-12" variants={fadeInUp}>
-              Software Engineer
-            </motion.p>
-            <motion.div 
-              className="flex flex-wrap justify-center gap-6" 
-              variants={fadeInUp}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: 0.3 }}
-            >
-              <motion.a
-                href="https://github.com/b0llu"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Github className="mr-2" size={20} />
-                <span>GitHub</span>
-              </motion.a>
-              <motion.a
-                href="https://www.linkedin.com/in/the-best-dhruv/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Linkedin className="mr-2" size={20} />
-                <span>LinkedIn</span>
-              </motion.a>
-              <motion.a
-                href="https://x.com/TheBestDhruv"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Twitter className="mr-2" size={20} />
-                <span>Twitter</span>
-              </motion.a>
-              <motion.a
-                href="https://docs.google.com/document/d/1HXfKbZ52zuRsSFb9GyCIbhx-GTUJ9uIOlagt5a7KJFw/edit?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <FileText className="mr-2" size={20} />
-                <span>Resume</span>
-              </motion.a>
-              <motion.a
-                href="mailto:samantdhruv@gmail.com"
-                className="flex items-center px-6 py-3 rounded-lg bg-zinc-900/50 backdrop-blur-sm text-slate-300 hover:text-[#818CF8] hover:bg-zinc-900/80 transition-all"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Mail className="mr-2" size={20} />
-                <span>Email</span>
-              </motion.a>
-            </motion.div>
-          </div>
-        </motion.section>
-
-        {/* Content Section with Tabs */}
-        <motion.section
-          ref={contentRef}
-          initial="hidden"
-          animate={contentInView ? "visible" : "hidden"}
-          variants={fadeInUp}
-          transition={{ duration: 0.6 }}
-          className="py-20 px-4"
-        >
-          <TabNavigation
-            tabs={tabs}
-            activeTab={activeTab}
-            onTabChange={setActiveTab}
-          />
-          <div className="relative min-h-[800px]">
-            <AnimatePresence mode="wait">
-              {renderTabContent()}
-            </AnimatePresence>
-          </div>
-        </motion.section>
-      </div>
+          </section>
+        </div>
+      </main>
     </div>
   );
 }
