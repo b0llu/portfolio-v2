@@ -13,12 +13,12 @@ export default function Experience() {
       transition={{ duration: 0.3 }}
     >
       <div>
-        <h1 className="text-4xl font-bold mb-12">Experience</h1>
+        <h1 className="text-4xl font-bold mb-12 text-text-light dark:text-text-dark">Experience</h1>
         <div className="space-y-12">
           {experiences.map((experience, index) => (
-            <div key={index} className="bg-white/5 rounded-lg p-6 hover:bg-white/10 transition-colors">
-              <h3 className="text-xl font-semibold mb-1">{experience.role}</h3>
-              <div className="text-gray-400 mb-4">
+            <div key={index} className="bg-gray-100 dark:bg-white/5 rounded-lg p-6 transition-colors">
+              <h3 className="text-xl font-semibold mb-1 text-text-light dark:text-text-dark">{experience.role}</h3>
+              <div className="text-gray-600 dark:text-gray-400 mb-4">
                 <span>{experience.company}</span>
                 <span className="mx-2">•</span>
                 <span>{experience.period}</span>
@@ -29,7 +29,7 @@ export default function Experience() {
                   </>
                 )}
               </div>
-              <ul className="space-y-2 text-gray-300">
+              <ul className="space-y-2 text-gray-700 dark:text-gray-300">
                 {experience.highlights.map((highlight, i) => (
                   <li key={i} className="flex items-start">
                     <span className="mr-2 mt-1.5">•</span>
@@ -39,12 +39,12 @@ export default function Experience() {
               </ul>
               {experience.projects && (
                 <div className="mt-6 space-y-4">
-                  <h4 className="text-lg font-semibold text-gray-200">Key Projects</h4>
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">Key Projects</h4>
                   {experience.projects.map((project, i) => (
-                    <div key={i} className="bg-white/5 rounded p-4">
-                      <h5 className="font-medium mb-1">{project.name}</h5>
-                      <p className="text-sm text-gray-400 mb-2">{project.period}</p>
-                      <ul className="space-y-1 text-sm text-gray-300">
+                    <div key={i} className="bg-white/50 dark:bg-white/5 rounded p-4">
+                      <h5 className="font-medium mb-1 text-text-light dark:text-text-dark">{project.name}</h5>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{project.period}</p>
+                      <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300">
                         {project.highlights.map((highlight, j) => (
                           <li key={j} className="flex items-start">
                             <span className="mr-2 mt-1">•</span>

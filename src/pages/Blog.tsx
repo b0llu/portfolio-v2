@@ -12,16 +12,16 @@ export default function Blog() {
       animate={contentInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.3 }}
     >
-      <h1 className="text-4xl font-bold mb-12">Blog</h1>
+      <h1 className="text-4xl font-bold mb-12 text-text-light dark:text-text-dark">Blog</h1>
       <div className="space-y-8">
         {blogPosts.map((post, index) => (
-          <div key={index} className="bg-white/5 rounded-lg p-6 hover:bg-white/10 transition-colors">
-            <h3 className="text-xl font-semibold mb-2">{post.title}</h3>
-            <p className="text-gray-400 mb-2">{post.date}</p>
-            <p className="text-gray-300 mb-4">{post.summary}</p>
+          <div key={index} className="bg-gray-100 dark:bg-white/5 rounded-lg p-6 transition-colors">
+            <h3 className="text-xl font-semibold mb-2 text-text-light dark:text-text-dark">{post.title}</h3>
+            <p className="text-text-secondary-light dark:text-text-secondary-dark mb-2">{post.date}</p>
+            <p className="text-gray-700 dark:text-gray-300 mb-4">{post.summary}</p>
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag, i) => (
-                <span key={i} className="text-sm bg-white/10 px-2 py-1 rounded">
+                <span key={i} className="text-sm bg-gray-200 dark:bg-white/10 text-text-light dark:text-text-dark px-2 py-1 rounded">
                   {tag}
                 </span>
               ))}

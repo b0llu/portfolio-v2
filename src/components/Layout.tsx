@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import Footer from './Footer';
 import MobileMenu from './MobileMenu';
+import ThemeToggler from './ThemeToggler';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,7 +12,10 @@ export default function Layout({ children }: LayoutProps) {
   const currentPath = location.pathname;
 
   return (
-    <div className="min-h-screen bg-[#111111] text-white flex flex-col">
+    <div className="min-h-screen bg-primary-light dark:bg-primary-dark text-text-light dark:text-text-dark flex flex-col transition-colors duration-200">
+      {/* Theme Toggler */}
+      <ThemeToggler />
+
       {/* Mobile Menu */}
       <MobileMenu />
 
@@ -20,40 +24,40 @@ export default function Layout({ children }: LayoutProps) {
         <div className="flex justify-start space-x-8">
           <Link 
             to="/" 
-            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
-              currentPath === '/' ? 'border-white' : 'border-transparent'
+            className={`pb-1 border-b-2 ${
+              currentPath === '/' ? 'border-text-light dark:border-text-dark' : 'border-transparent'
             }`}
           >
             Home
           </Link>
           <Link 
             to="/experience" 
-            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
-              currentPath === '/experience' ? 'border-white' : 'border-transparent'
+            className={`pb-1 border-b-2 ${
+              currentPath === '/experience' ? 'border-text-light dark:border-text-dark' : 'border-transparent'
             }`}
           >
             Experience
           </Link>
           <Link 
             to="/projects" 
-            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
-              currentPath === '/projects' ? 'border-white' : 'border-transparent'
+            className={`pb-1 border-b-2 ${
+              currentPath === '/projects' ? 'border-text-light dark:border-text-dark' : 'border-transparent'
             }`}
           >
             Projects
           </Link>
           <Link 
             to="/blog" 
-            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
-              currentPath === '/blog' ? 'border-white' : 'border-transparent'
+            className={`pb-1 border-b-2 ${
+              currentPath === '/blog' ? 'border-text-light dark:border-text-dark' : 'border-transparent'
             }`}
           >
             Blog
           </Link>
           <Link 
             to="/contact" 
-            className={`text-white hover:text-gray-300 transition-colors pb-1 border-b-2 ${
-              currentPath === '/contact' ? 'border-white' : 'border-transparent'
+            className={`pb-1 border-b-2 ${
+              currentPath === '/contact' ? 'border-text-light dark:border-text-dark' : 'border-transparent'
             }`}
           >
             Contact
