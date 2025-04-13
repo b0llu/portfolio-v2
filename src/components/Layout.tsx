@@ -1,4 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
+import Footer from './Footer';
+import MobileMenu from './MobileMenu';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -9,9 +11,12 @@ export default function Layout({ children }: LayoutProps) {
   const currentPath = location.pathname;
 
   return (
-    <div className="min-h-screen bg-[#111111] text-white">
-      {/* Navigation */}
-      <nav className="container mx-auto px-4 py-8 max-w-3xl">
+    <div className="min-h-screen bg-[#111111] text-white flex flex-col">
+      {/* Mobile Menu */}
+      <MobileMenu />
+
+      {/* Desktop Navigation */}
+      <nav className="container mx-auto px-4 py-8 max-w-3xl hidden md:block">
         <div className="flex justify-start space-x-8">
           <Link 
             to="/" 
@@ -57,9 +62,12 @@ export default function Layout({ children }: LayoutProps) {
       </nav>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-16 max-w-3xl">
+      <main className="container mx-auto px-4 py-16 max-w-3xl flex-grow">
         {children}
       </main>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 } 

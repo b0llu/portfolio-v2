@@ -1,8 +1,17 @@
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 import { blogPosts } from '../data/blog';
 
 export default function Blog() {
+  const [contentRef, contentInView] = useInView({ triggerOnce: true });
+
   return (
-    <div>
+    <motion.div
+      ref={contentRef}
+      initial={{ opacity: 0, y: 20 }}
+      animate={contentInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.3 }}
+    >
       <h1 className="text-4xl font-bold mb-12">Blog</h1>
       <div className="space-y-8">
         {blogPosts.map((post, index) => (
@@ -20,6 +29,6 @@ export default function Blog() {
           </div>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 } 

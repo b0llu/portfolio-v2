@@ -13,14 +13,14 @@ export default function Home() {
           ref={heroRef}
           initial={{ opacity: 0, y: 20 }}
           animate={heroInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.3 }}
         >
           <h1 className="text-4xl font-bold mb-2">Dhruv Samant</h1>
           <p className="text-gray-400 mb-16">Software Engineer | Tech Enthusiast | Gamer | Fantasy & Manga Nerd</p>
           
           <div className="aspect-video rounded-lg overflow-hidden mb-12">
             <img 
-              src="https://picsum.photos/800/400?grayscale" 
+              src="https://res.cloudinary.com/dtzklid8v/image/upload/v1744515766/PXL_20230714_081323658_ify78z.jpg?grayscale" 
               alt="Professional headshot" 
               className="w-full h-full object-cover"
             />

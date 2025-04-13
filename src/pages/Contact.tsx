@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { Github, Linkedin, Twitter, Mail, Send } from 'lucide-react';
 import emailjs, { EmailJSResponseStatus } from '@emailjs/browser';
+import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 
 export default function Contact() {
   const [isLoading, setIsLoading] = useState(false);
@@ -9,6 +11,7 @@ export default function Contact() {
     message: ''
   });
   const form = useRef<HTMLFormElement>(null);
+  const [contentRef, contentInView] = useInView({ triggerOnce: true });
 
   const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -53,7 +56,12 @@ export default function Contact() {
   };
 
   return (
-    <div>
+    <motion.div
+      ref={contentRef}
+      initial={{ opacity: 0, y: 20 }}
+      animate={contentInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.3 }}
+    >
       <h1 className="text-4xl font-bold mb-12">Contact</h1>
       <div className="grid md:grid-cols-2 gap-8">
         {/* Social Links */}
@@ -172,6 +180,6 @@ export default function Contact() {
           </button>
         </form>
       </div>
-    </div>
+    </motion.div>
   );
 } 
