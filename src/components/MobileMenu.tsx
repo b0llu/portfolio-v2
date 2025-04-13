@@ -19,11 +19,11 @@ export default function MobileMenu() {
   ];
 
   return (
-    <div className="md:hidden">
+    <div className="md:hidden flex justify-center items-center">
       {/* Hamburger Button */}
       <button
         onClick={toggleMenu}
-        className="fixed top-4 left-1.5 z-50 p-2 text-gray-400 hover:text-white transition-colors bg-[#111111] rounded-md"
+        className="text-text-secondary-light dark:text-text-secondary-dark transition-colors"
       >
         {isOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
@@ -47,7 +47,7 @@ export default function MobileMenu() {
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'tween', duration: 0.3 }}
-              className="fixed top-0 left-0 h-full w-64 bg-[#111111] shadow-xl z-50 p-8"
+              className="fixed top-0 left-0 h-full w-64 bg-primary-light dark:bg-primary-dark shadow-xl z-50 p-8"
             >
               <nav className="flex flex-col space-y-4 mt-12">
                 {menuItems.map((item) => (
@@ -57,8 +57,8 @@ export default function MobileMenu() {
                     onClick={toggleMenu}
                     className={`text-lg ${
                       currentPath === item.path
-                        ? 'text-white font-semibold'
-                        : 'text-gray-400 hover:text-white'
+                        ? 'text-text-light dark:text-text-dark font-semibold'
+                        : 'text-text-secondary-light dark:text-text-secondary-dark hover:text-accent-light dark:hover:text-accent-dark'
                     } transition-colors`}
                   >
                     {item.label}

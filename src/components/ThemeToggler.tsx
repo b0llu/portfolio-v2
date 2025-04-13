@@ -6,7 +6,7 @@ export default function ThemeToggler() {
   return (
     <button
       onClick={toggleTheme}
-      className={`fixed top-8 right-8 w-4 h-4 rounded-full flex items-center justify-center transition-all duration-200 ${
+      className={`fixed top-5 right-5 w-4 h-4 rounded-full flex items-center justify-center transition-all duration-200 ${
         theme === 'dark'
           ? 'bg-text-dark'
           : 'bg-text-light'
