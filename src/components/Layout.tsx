@@ -33,6 +33,14 @@ export default function Layout({ children }: LayoutProps) {
               Home
             </Link>
             <Link 
+              to="/about" 
+              className={`pb-1 border-b-2 transition-colors ${
+                currentPath === '/about' ? 'border-text-light dark:border-text-dark' : 'border-transparent'
+              }`}
+            >
+              About
+            </Link>
+            <Link 
               to="/experience" 
               className={`pb-1 border-b-2 transition-colors ${
                 currentPath === '/experience' ? 'border-text-light dark:border-text-dark' : 'border-transparent'

@@ -78,7 +78,7 @@ export default function Contact() {
                 <Github size={20} className="text-text-light dark:text-text-dark" />
               </div>
               <div>
-                <div className="font-medium text-text-light dark:text-text-dark group-hover:text-accent-light dark:group-hover:text-accent-dark transition-colors">GitHub</div>
+                <div className="font-medium text-text-light dark:text-text-dark transition-colors">GitHub</div>
                 <div className="text-sm text-text-secondary-light dark:text-text-secondary-dark">Follow my work</div>
               </div>
             </a>
@@ -92,7 +92,7 @@ export default function Contact() {
                 <Linkedin size={20} className="text-text-light dark:text-text-dark" />
               </div>
               <div>
-                <div className="font-medium text-text-light dark:text-text-dark group-hover:text-accent-light dark:group-hover:text-accent-dark transition-colors">LinkedIn</div>
+                <div className="font-medium text-text-light dark:text-text-dark transition-colors">LinkedIn</div>
                 <div className="text-sm text-text-secondary-light dark:text-text-secondary-dark">Let's connect professionally</div>
               </div>
             </a>
@@ -106,7 +106,7 @@ export default function Contact() {
                 <Twitter size={20} className="text-text-light dark:text-text-dark" />
               </div>
               <div>
-                <div className="font-medium text-text-light dark:text-text-dark group-hover:text-accent-light dark:group-hover:text-accent-dark transition-colors">Twitter</div>
+                <div className="font-medium text-text-light dark:text-text-dark transition-colors">Twitter</div>
                 <div className="text-sm text-text-secondary-light dark:text-text-secondary-dark">Follow my updates</div>
               </div>
             </a>
@@ -118,7 +118,7 @@ export default function Contact() {
                 <Mail size={20} className="text-text-light dark:text-text-dark" />
               </div>
               <div>
-                <div className="font-medium text-text-light dark:text-text-dark group-hover:text-accent-light dark:group-hover:text-accent-dark transition-colors">Email</div>
+                <div className="font-medium text-text-light dark:text-text-dark transition-colors">Email</div>
                 <div className="text-sm text-text-secondary-light dark:text-text-secondary-dark">samantdhruv@gmail.com</div>
               </div>
             </a>

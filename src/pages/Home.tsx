@@ -16,23 +16,25 @@ export default function Home() {
           transition={{ duration: 0.3 }}
         >
           <h1 className="text-4xl font-bold mb-2 text-text-light dark:text-text-dark">Dhruv Samant</h1>
-          <p className="text-gray-600 dark:text-gray-400 mb-16">Software Engineer | Tech Enthusiast | Gamer | Fantasy & Manga Nerd</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-16">Full-stack Software Engineer | Tech Enthusiast | Gamer | Fantasy Novels & Manga Reader</p>
           
           <div className="aspect-video rounded-lg overflow-hidden mb-12">
             <img 
-              src="https://res.cloudinary.com/dtzklid8v/image/upload/v1744515766/PXL_20230714_081323658_ify78z.jpg?grayscale" 
+              src="/assets/main.jpg" 
               alt="Professional headshot" 
               className="w-full h-full object-cover"
             />
           </div>
 
           <div className="prose dark:prose-invert">
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-              I'm a Software Engineer who thrives in full-stack environments, with a strong focus on JavaScript and modern web technologies. I enjoy turning complex challenges into clean, efficient solutions that scale. Whether it's building intuitive front-end experiences or optimizing back-end systems, I bring a thoughtful and practical approach to every project.
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+              I'm Dhruv Samant, a full-stack Software Engineer passionate about building modern web experiences with JavaScript and beyond. I love transforming real-world problems into scalable, user-friendly solutions that actually make a difference.
             </p>
-            <br />
-            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-              Beyond the code, I'm a tech enthusiast who's always exploring new tools and trends. I'm also an avid gamer, fantasy novel lover, and manga reader — drawn to rich stories and immersive worlds, whether they're built with code or imagination.
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+              From crafting sleek UIs to fine-tuning backend logic, I bring both creativity and precision to every project. I'm all about clean architecture, thoughtful design, and shipping things that work.
+            </p>
+            <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-8">
+              When I'm not coding, you'll probably find me deep into a strategy game, flipping through a fantasy novel, or geeking out over the latest dev tools and tech trends.
             </p>
             
             <div className="mt-8">
